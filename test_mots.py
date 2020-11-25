@@ -1,4 +1,4 @@
-#alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p"]
+#alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p"]A
 #import numpy as np
 
 #def genere():
@@ -8,3 +8,4 @@
 #        proba = np.random.randint(0, len(alphabet))
 #        mot += alphabet[proba]
 #    return mot
+
