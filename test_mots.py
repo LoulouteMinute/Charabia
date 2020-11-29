@@ -22,15 +22,30 @@ def mat_proba(doc_ref, alphabet):
                 mat[i, alphabet.index(suiv)] += 1
             else:
                 mat[i, len(alphabet) - 1] += 1
-     somme_lignes = np.sum(mat, axis=0)
-     for i in range(len(alphabet)):
-         for j in range(len(alphabet)):
-             if somme_lignes[i] != 0:
-                 mat[i, j] = (mat[i, j])/somme_lignes[i]
-     return mat
+    somme_tot = np.sum(mat)
+    for i in range(len(alphabet)):
+        for j in range(len(alphabet)):
+            if somme_tot != 0:
+                mat[i, j] = (mat[i, j])/somme_tot
+    return mat
 
-lettres = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'à', 'â', 'é', 'è', 'ê', 'ë', 'ç', 'ï', 'î', 'ô', 'ù', '$
-start_time = time.time()
-with open('/Users/marilou/Documents/dev/ProjetAlgoL2/liste_mots.txt', 'r') as ref:
-    print(mat_proba(ref, lettres))
-print(time.time() - start_time, "seconds")
+def main():
+    lettres = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'à', 'â', 'é', 'è', 'ê', 'ë', 'ç', 'ï', 'î', 'ô', 'ù', 'û', 'ü', 'æ', 'œ', '\n']
+    start_time = time.time()
+    with open('/Users/marilou/Documents/dev/ProjetAlgoL2/liste_mots.txt', 'r') as ref:
+        matrice = mat_proba(ref, lettres)
+    print(matrice)
+    print(time.time() - start_time, "seconds")
+    for i in range(len(lettres)):
+        for j in range(len(lettres)):
+            print(matrice[i, j])
+    sommes = np.sum(matrice, axis = 0)
+    total = 0
+    print("valeurs des sommes")
+    for i in sommes:
+        print(i)
+        total += i
+    print("le total vaut:", total)
+
+
+main()
