@@ -16,7 +16,8 @@ def longueur(doc):
 doc=open('Mots.txt','r')
 Lstats=longueur(doc)
 doc.close()
-print(Lstats)
+#print(Lstats)
+tailles=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
 
 import numpy as np
 alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p"]
@@ -24,11 +25,11 @@ alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o"
 def genere(taille_mot):
     mot = ""
     for i in range(taille_mot):
-        proba = np.random.choice()
-        mot+= alphabet[proba]
+        nouv_lettre= np.random.choice(alphabet)
+        mot+= nouv_lettre
     return mot
 
 
 for i in range(int(input('nb de mots charabia: '))):
-    long=np.random
-    print(genere(Lstats.index(np.random.choice(Lstats))))
+    taille_mot=np.random.choice(tailles, size=None, replace=False, p=Lstats)
+    print(genere(taille_mot))
