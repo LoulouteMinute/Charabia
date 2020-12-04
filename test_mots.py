@@ -1,14 +1,3 @@
-#alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p"]
-#import numpy as np
-
-#def genere():
-#    mot = ""
-#    taille_mot = np.random.randint(2, 8)
-#    for i in range(taille_mot):
-#        proba = np.random.randint(0, len(alphabet))
-#        mot += alphabet[proba]
-#    return mot
-
 import numpy as np
 import time
 import pdb
@@ -74,9 +63,12 @@ def main():
     print('Temps pour matrice avec dico:', time.time() - start_time_b, "secondes")
 
 #    print(np.array_equal(a, b))
-    for i in range(3):
+    for i in range(42):
         for j in range(42):
-            print(lettres[i], lettres[j], a[i, j], b[i, j])
+            if a[i, j] == b[i, j]:
+                 print(lettres[i], lettres[j], 'True')
+            else:
+                print(lettres[i], lettres[j], 'False')
 
 #    somme = [0]*42
 #    total = 0
@@ -87,7 +79,5 @@ def main():
 #        total += somme[i]
 #    print(somme)
 #    print("le total vaut:", total)
-
-
 
 main()
