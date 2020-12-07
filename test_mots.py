@@ -6,11 +6,10 @@ def mat_proba_1(doc_ref, alphabet):
     l = doc_ref.read()
     mat = np.zeros(shape=(len(alphabet),len(alphabet)))
     somme_tot = [0]*len(alphabet)
-    for i in range(len(alphabet)):
-        for j in range(len(l)):
-            if l[j] == alphabet[i] and j < len(l)-1:
-                suiv = l[j+1]
-                mat[i, alphabet.index(suiv)] += 1
+    for i in range(len(l)-1):
+        lettre = l[i]
+        suiv = l[i+1]
+        mat[alphabet.index(lettre), alphabet.index(suiv)] += 1
     for i in range(len(alphabet)):
         for j in range(len(alphabet)):
             somme_tot[i] += mat[i, j]
@@ -49,26 +48,51 @@ def mat_proba_2(doc_ref, alphabet):
                 mat[i, j] = (mat[i, j])/somme_ench[i]
     return mat
 
+def mat_proba_3(doc_ref, alphabet):
+    mat = np.zeros(shape = (len(alphabet), len(alphabet)))
+    lecture = doc_ref.read()
+    nb1 = -1
+    somme_tot = [0]*(len(alphabet))
+    for i in alphabet :
+        nb1 += 1
+        p = lecture.find(i)
+        while p != -1:
+            if p == len(lecture)-1:
+                p = -1
+                nb2 = alphabet.index('\n')
+                mat[nb1][nb2] += 1
+            else:
+                position = p
+                suivant = lecture[position+1]
+                nb2 = alphabet.index(suivant)
+                mat[nb1][nb2] += 1
+                p = lecture.find(i, position+1)
+    for i in range(len(alphabet)):
+        for j in range(len(alphabet)):
+            somme_tot[i] += mat[i][j]
+        for j in range(len(alphabet)):
+            if somme_tot[i] != 0:
+                mat[i][j] = (mat[i][j])/somme_tot[i]
+    return mat
+
 def main():
     lettres = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'à', 'â', 'é', 'è', 'ê', 'ë', 'ç', 'ï', 'î', 'ô', 'ù', 'û', 'ü', 'æ', 'œ', '\n']
     lettres.sort()
-    print(lettres, len(lettres))
     start_time_a = time.time()
     with open('/Users/marilou/Documents/dev/ProjetAlgoL2/liste_mots.txt', 'r') as ref:
         a = mat_proba_1(ref, lettres)
     print('Temps pour matrice avec tableaux:', time.time() - start_time_a, 'secondes')
     start_time_b = time.time()
     with open('/Users/marilou/Documents/dev/ProjetAlgoL2/liste_mots.txt', 'r') as ref:
-        b = mat_proba_2(ref, lettres)
-    print('Temps pour matrice avec dico:', time.time() - start_time_b, "secondes")
+        b = mat_proba_3(ref, lettres)
+    print('Temps pour matrice Mathilde:', time.time() - start_time_b, "secondes")
 
-#    print(np.array_equal(a, b))
-    for i in range(42):
-        for j in range(42):
-            if a[i, j] == b[i, j]:
-                 print(lettres[i], lettres[j], 'True')
-            else:
-                print(lettres[i], lettres[j], 'False')
+#    for i in range(42):
+#        for j in range(42):
+#            if a[i, j] == b[i, j]:
+#                print(lettres[i], lettres[j], 'True')
+#            else:
+#                print(lettres[i], lettres[j], 'False')
 
 #    somme = [0]*42
 #    total = 0
