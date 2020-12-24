@@ -2,6 +2,7 @@ from numpy import zeros, array
 import time
 import numpy as np
 import os
+import re
 os.chdir('C:\\Users\\chhar_000\\Documents\\etudes\\L2 Cpes\\algorithmiqueinfo\\PROJET S3')
 
 
@@ -48,7 +49,7 @@ tailles=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
 
 #Creation des matrices de probas enchainements et taille:
 start_time = time.time()
-ref=open('Mots.txt','r')
+ref=open('liste2.txt','r',encoding='utf8')
 prob = mat_probas(ref, lettres)
 Lstats= longueur(ref)
 ref.close()
@@ -90,12 +91,13 @@ def genere_charabia3(premiere_lettre, mat_enchainement, mat_size, alphabet, tail
 
 
 #Remplacer les mots d'un texte par du charabia:
-print('Bienvenu au générateur de charabia Chamama (mdr jsp)\n Quel texte voulez-vous charabier?')
+print('Bienvenu au générateur de charabia Chamama \n Quel texte voulez-vous charabier?')
 nom_fichier=str(input('introduire nom_du_fichier.txt:\n'))
-doc=open(nom_fichier, 'r')
-Lmots=doc.read().split(' ')
-print(Lmots)
+doc=open(nom_fichier, 'r', encoding='utf8')
+docstr=doc.read()
+Lmots=re.split(r'(\W+)', docstr)
 doc.close()
+print(Lmots)
 
 print('Choisissez le mode de remplacement des mots:\nPour remplacer aléatoirement, entrez A;\nPour remplacer par taille, entrez T;\nPour remplacer en fonction de la première lettre, entrez P.\n')
 mode=input()
