@@ -9,7 +9,8 @@ def mat_proba_1(doc_ref, alphabet):
     for i in range(len(l)-1):
         lettre = l[i]
         suiv = l[i+1]
-        mat[alphabet.index(lettre), alphabet.index(suiv)] += 1
+        if lettre in alphabet and suiv in alphabet :
+            mat[alphabet.index(lettre), alphabet.index(suiv)] += 1
     for i in range(len(alphabet)):
         for j in range(len(alphabet)):
             somme_tot[i] += mat[i, j]
