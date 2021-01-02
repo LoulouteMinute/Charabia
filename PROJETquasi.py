@@ -1,15 +1,17 @@
 from numpy import zeros, array
 import time
 import numpy as np
-import os
+import string
 import re
+import os
 os.chdir('C:\\Users\\chhar_000\\Documents\\etudes\\L2 Cpes\\algorithmiqueinfo\\PROJET S3')
 
 
 #Matrice statistiques tailles des mots
 def longueur(doc_ref):
     stats=27*[0]
-    Lmots=doc_ref.read().split('\n')
+    docstr=doc_ref.read()
+    Lmots=re.split(r'(\W+)', docstr)
     for mot in Lmots:
         stats[len(mot)+1]+=1/(len(Lmots))
     return stats
@@ -47,48 +49,88 @@ lettres = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","
 lettres.sort()
 tailles=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
 
-#Creation des matrices de probas enchainements et taille:
+#Creation des matrices de probas:
 start_time = time.time()
+#matrice d'enchainement
 ref=open('liste2.txt','r',encoding='utf8')
 prob = mat_probas(ref, lettres)
+ref.close()
+#matrice de tailles des mots:
+ref=open('liste2.txt','r',encoding='utf8')
 Lstats= longueur(ref)
 ref.close()
+
 print(time.time() - start_time)
+print(prob,'\n',Lstats)
+
 
 #Fonction pour la generation d'un mot charabia de taille donnée:
 def genere_charabia1(mat_enchainement, alphabet, taille):
-    ch = "\n"
+    ch = "\n\n"
     for i in range(taille):
         tab = mat_enchainement[alphabet.index(ch[i])]
         new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+        while new_letter=='\n' or (new_letter==ch[-2] and new_letter==ch[-1]):
+            new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
         ch += new_letter
-    ch = ch[1:]
+    ch = ch[2:]
     return ch
 
 
 #Fonction pour la generation de charabia de taille aléatoire, en prenant en compte les probabilités de taille:
 def genere_charabia2(mat_enchainement, mat_size, alphabet, tailles):
     size = np.random.choice(tailles, size = None, replace = False, p = mat_size)
-    ch = "\n"
+    ch = "\n\n"
     for i in range(size):
         tab = mat_enchainement[alphabet.index(ch[i])]
         new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+        while new_letter=='\n' or (new_letter==ch[-2] and new_letter==ch[-1]):
+            new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
         ch += new_letter
-    ch = ch[1:]
+    ch = ch[2:]
     return ch
 
 #Fonction pour la generation de charabia à partir de la première lettre et de taille aléatoire
 def genere_charabia3(premiere_lettre, mat_enchainement, mat_size, alphabet, tailles):
     size = np.random.choice(tailles, size = None, replace = False, p = mat_size)+1
-    ch = premiere_lettre
+    if premiere_lettre in string.ascii_lowercase:
+        ch = premiere_lettre
+        for i in range(size):
+            tab = mat_enchainement[alphabet.index(ch[i])]
+            new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+            while new_letter=='\n':
+                new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+            ch += new_letter
+        return ch
+    elif premiere_lettre in string.ascii_uppercase:
+        ch=premiere_lettre.lower()
+        for i in range(size):
+            tab = mat_enchainement[alphabet.index(ch[i])]
+            new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+            while new_letter=='\n':
+                new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+            ch += new_letter
+        return ch.capitalize()
+#def genere_charabia3(premiere_lettre, mat_enchainement, mat_size, alphabet, tailles):
+#    size = np.random.choice(tailles, size = None, replace = False, p = mat_size)+1
+#    ch = premiere_lettre
+#    for i in range(size):
+#        tab = mat_enchainement[alphabet.index(ch[i])]
+#        new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+#                    while new_letter=='\n':
+#                new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+#            ch += new_letter
+#    return ch
+
+#Fonction pour la generation de charabia à partir des dernieres lettres: A CORRIGER
+def genere_charabia4(dernieres_lettres, mat_enchainement,mat_size, alphabet, tailles):
+    size=np.random.choice(tailles, size=None, replace=False, p=mat_size) - len(dernieres_lettres)
+    ch=dernieres_lettres
     for i in range(size):
-        tab = mat_enchainement[alphabet.index(ch[i])]
-        new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
-        ch += new_letter
+        tab = mat_enchainement[:,alphabet.index(ch[0])]
+        new_letter = np.random.choice(alphabet, size = None, replace= False, p= tab)
+        ch= new_letter+ch
     return ch
-
-#Fonction pour la generation de charabia à partir des dernieres lettres:
-
 
 #Remplacer les mots d'un texte par du charabia:
 print('Bienvenu au générateur de charabia Chamama \n Quel texte voulez-vous charabier?')
@@ -99,22 +141,31 @@ Lmots=re.split(r'(\W+)', docstr)
 doc.close()
 print(Lmots)
 
-print('Choisissez le mode de remplacement des mots:\nPour remplacer aléatoirement, entrez A;\nPour remplacer par taille, entrez T;\nPour remplacer en fonction de la première lettre, entrez P.\n')
+print('Choisissez le mode de remplacement des mots:\nPour remplacer aléatoirement, entrez A;\nPour remplacer par taille, entrez T;\nPour remplacer en fonction de la première lettre, entrez P;\n, Pour remplacer en fonction du suffixe, entrez S, \n')
 mode=input()
 f=int(input('\nChoisissez la fréquence de remplacement: tous les ? mots : '))
 i=np.random.randint(f)
 
+
 while i<len(Lmots):
-    a_remplacer=Lmots[i]
-    if mode=='T':
-        Lmots[i]=genere_charabia1(prob,lettres,len(a_remplacer))
-    elif mode=='A':
-        Lmots[i]=genere_charabia2(prob,Lstats,lettres,tailles)
-    elif mode=='P':
-        Lmots[i]=genere_charabia3(a_remplacer[0],prob,Lstats,lettres,tailles)
-    i+=f
+    #a_remplacer=Lmots[i]
+    if len(Lmots[i])<=3:
+        i+=1
+    else:
+        a_remplacer=Lmots[i]
+        if mode=='T':
+            Lmots[i]=genere_charabia1(prob,lettres,len(a_remplacer))
+        elif mode=='A':
+            Lmots[i]=genere_charabia2(prob,Lstats,lettres,tailles)
+        elif mode=='P':
+            Lmots[i]=genere_charabia3(a_remplacer[0],prob,Lstats,lettres,tailles)
+        elif mode=='S':
+            long_suffixe=int(input('Entrez la longueur du suffixe: '))
+            Lmots[i]=genere_charabia4(a_remplacer[-long_suffixe],prob,Lstats,lettres,tailles)
+        if a_remplacer[0] in string.ascii_uppercase : #Cas ou le mot a remplacer est en debut de phrase/vers
+            Lmots[i].capitalize()
+        i+=2*f
 
 charabia=open('charabia.txt','w')
-charabia.write('\n \n')
-charabia.write(' '.join(Lmots))
+charabia.write(''.join(Lmots))
 charabia.close()
