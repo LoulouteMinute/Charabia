@@ -4,7 +4,7 @@ import numpy as np
 import string
 import re
 import os
-os.chdir('/Users/marilou/Documents/dev/ProjetAlgoL2')
+
 
 
 #Matrice statistiques tailles des mots
@@ -64,8 +64,6 @@ def traitement(reference):
         if len(tab[i]) > 1  and ord(tab[i][0]) in majuscules:
             tab[i][0].lower()
     texte = ' '.join(tab)
-    #texte = texte.replace('   ', ' ')
-    #texte = texte.replace('  ', ' ')
     return texte
 
 #Fonction pour la generation d'un mot charabia de taille donnée:
@@ -141,6 +139,24 @@ def genere_charabia2(mat_enchainement, mat_enchainement_fin, mat_size, alphabet,
         i = np.random.randint(0,len(ch))
         ch = ch[:i] + np.random.choice(['a','e','i','o','u','y']) + ch[i + 1:]
     ch = ch[2:]
+    #on ne veut pas de mots qui commencent par deux fois la meme lettre
+    while ch[0] == ch[1]:
+        tab = mat_enchainement[alphabet.index(ch[0])]
+        new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+        ch = ch[0]+new_letter+ch[2:]
+    #on ne veut pas d'enchainements de plus de 3 consonnes
+    if len(ch)<=3:
+        if len(re.findall('[aeiouy]+',ch)) == 0:
+            i=np.random.randint(0,len(ch))
+            voyelle=np.random.choice(['a','e','i','o','u','y'])
+            ch=ch[:i]+voyelle+ch[i+1:]
+    else:
+        l = 0
+        while l < len(ch):
+            if len(re.findall('[aeiouy]+',ch[l:l+4])) == 0:
+                voyelle=np.random.choice(['a','e','i','o','u','y'])
+                ch=ch[:l+3]+voyelle+ch[l+4:]
+            l += 3
     return ch
 
 #Fonction pour la generation de charabia à partir de la première lettre et de taille aléatoire
@@ -170,6 +186,24 @@ def genere_charabia3(premiere_lettre, mat_enchainement, mat_enchainement_fin, ma
                 ch += new_letter
             while ch[0] ==  ch[1] or ch[1] == ch[2]:
                 ch[1] = np.random.choice(alphabet, size = None, replace = False, p = tab)
+        #on ne veut pas de mots qui commencent par deux fois la meme lettre
+        while ch[0] == ch[1]:
+            tab = mat_enchainement[alphabet.index(ch[0])]
+            new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+            ch = ch[0]+new_letter+ch[2:]
+        #on ne veut pas d'enchainements de plus de 3 consonnes
+        if len(ch)<=3:
+            if len(re.findall('[aeiouy]+',ch)) == 0:
+                i=np.random.randint(0,len(ch))
+                voyelle=np.random.choice(['a','e','i','o','u','y'])
+                ch=ch[:i]+voyelle+ch[i+1:]
+        else:
+            l = 0
+            while l < len(ch):
+                if len(re.findall('[aeiouy]+',ch[l:l+4])) == 0:
+                    voyelle=np.random.choice(['a','e','i','o','u','y'])
+                    ch=ch[:l+3]+voyelle+ch[l+4:]
+                l += 3
         return ch
     elif premiere_lettre in string.ascii_uppercase:
         ch = premiere_lettre.lower()
@@ -193,6 +227,24 @@ def genere_charabia3(premiere_lettre, mat_enchainement, mat_enchainement_fin, ma
                 while new_letter == '\n' or new_letter == ' ': # or (new_letter == ch[-2] and new_letter == ch[-1]):
                     new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
                 ch += new_letter
+        #on ne veut pas de mots qui commencent par deux fois la meme lettre
+        while ch[0] == ch[1]:
+            tab = mat_enchainement[alphabet.index(ch[0])]
+            new_letter = np.random.choice(alphabet, size = None, replace = False, p = tab)
+            ch = ch[0]+new_letter+ch[2:]
+        #on ne veut pas d'enchainements de plus de 3 consonnes
+        if len(ch)<=3:
+            if len(re.findall('[aeiouy]+',ch)) == 0:
+                i=np.random.randint(0,len(ch))
+                voyelle=np.random.choice(['a','e','i','o','u','y'])
+                ch=ch[:i]+voyelle+ch[i+1:]
+        else:
+            l = 0
+            while l < len(ch):
+                if len(re.findall('[aeiouy]+',ch[l:l+4])) == 0:
+                    voyelle=np.random.choice(['a','e','i','o','u','y'])
+                    ch=ch[:l+3]+voyelle+ch[l+4:]
+                l += 3
         return ch.capitalize()
 
 
@@ -205,7 +257,7 @@ def main():
     alphabet_angl = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "\n", " "]
     alphabet_lat = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "\n", " ", "æ", "œ"]
 
-    print('\n\nBienvenue au générateur de charabia Chamama ? Dans quelle langue voulez-vous charabier votre texte ? Taper le chiffre correspondant :\n1) Français\n2) Espagnol\n3) Anglais\n4) Latin ?\n')
+    print('\n\nBienvenue au générateur de charabia Chamama ! Dans quelle langue voulez-vous charabier votre texte ? Taper le chiffre correspondant :\n1) Français\n2) Espagnol\n3) Anglais\n4) Latin ?\n')
     langue = int(input())
     if langue == 1:
         lettres = alphabet_fr
@@ -221,6 +273,9 @@ def main():
         document = 'ref_latin.txt'
     lettres.sort()
     tailles = list(range(1,28))
+
+    chemin = str(input("Veuillez indiquer le chemin complet vers le fichier que vous souhaitez charabier :\n"))
+    os.chdir(chemin)
 
     #traitement texte de reference pour les matrices
     with open(document, 'r') as texte_ref:
@@ -246,7 +301,7 @@ def main():
 
     #print("Temps d'exécution :", time.time() - start_time)
 
-    nom_fichier = str(input('introduire nom_du_fichier.txt:\n'))
+    nom_fichier = str(input('Maintenant introduisez le fichier sous la forme nom_du_fichier.txt:\n'))
     doc = open(nom_fichier, 'r', encoding='utf8')
     docstr = doc.read()
     Lmots = re.split(r'(\W+)', docstr)
@@ -276,5 +331,6 @@ def main():
     charabia = open('charabia.txt','w')
     charabia.write(''.join(Lmots))
     charabia.close()
+    print(" C'est fait ! Vous trouverez votre texte charabié nommé 'charabia.txt' au même endroit que le fichier source utilisé.")
 
 main()
