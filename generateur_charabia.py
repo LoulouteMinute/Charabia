@@ -13,8 +13,6 @@ def longueur(doc_ref):
     Lmots = re.split(r'(\W+)', doc_ref)
     for mot in Lmots:
         stats[len(mot)+1] += 1/(len(Lmots))
-        if len(mot) > 30:
-            print(mot)
     return stats
 
 #Matrice de probabilités
