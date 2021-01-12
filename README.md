@@ -10,7 +10,7 @@ Ce programme contient un système d’interaction avec l’utilisateur qui va lu
 Notre programme propose plusieurs langues : le français, l’anglais, l’espagnol et le latin. 
 La génération des mots peut se faire aléatoirement, en respectant la taille du mot originel, ou en gardant la première lettre. 
 
-Pour faire fonctionner ce programme, l’utilisateur est invité à télécharger les corpus de mots servant à la génération des matrices de probabilités dans chaque langue (ref_langue.txt), ainsi que le fichier "generateur_charabia.py" qu'il lui faudra exécuter.
+Pour faire fonctionner ce programme, l’utilisateur est invité à télécharger les corpus de mots servant à la génération des matrices de probabilités dans chaque langue (ref_langue.txt), ainsi que le fichier "tailles_mots.txt" et pour finir "generateur_charabia.py" qu'il lui faudra exécuter.
 Il peut aussi, s’il le souhaite, prendre les textes à modifier proposés ici, ou bien les choisir lui-même. 
 Le chemin d’accès vers le répertoire où sont stockés tous ces fichiers dans son ordinateur lui sera demandé. 
 
