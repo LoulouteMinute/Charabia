@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy as np
 import time
 import pdb
@@ -132,8 +131,8 @@ def main():
     print("le total vaut:", total)
 
 main()
->>>>>>> matrice_enchainement_lettres_marilou
-=======
+
+
 #alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p"]
 import numpy as np
 
@@ -155,4 +154,3 @@ def genere_charabia(mat_enchainement, mat_size, alphabet, tailles):
         ch += new_letter
     ch = ch[1:]
     return ch
->>>>>>> generation_charabia
